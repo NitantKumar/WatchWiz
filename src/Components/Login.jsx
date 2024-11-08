@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
-import WatchWiz from '../assets/WatchWiz.png'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from '../utils/firebase';
-import { useNavigate } from 'react-router-dom';
 import { addUser } from '../utils/userSlice';
 import { useDispatch } from 'react-redux';
+import Header from './Header';
 
 const Login = () => {
   const [toggleForm, setToggleForm] = useState(false);
@@ -12,7 +11,6 @@ const Login = () => {
   const emailValue = useRef('');
   const passwordValue = useRef('');
   const [errorMessage, setErrorMessage] = useState('');
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleToggleForm = () => {
@@ -57,18 +55,15 @@ const Login = () => {
               displayName: nameValue.current.value
             }).then(() => {
               dispatch(addUser({uid: user.uid, email: user.email, displayName: user.displayName}));
-              navigate("/browse");
             }).catch((error) => {
               const errorCode = error.code;
               const errorMessage = error.message;
-              console.log(errorCode, errorMessage);
               setErrorMessage(errorCode + ": " + errorMessage);
             });
           })
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            console.log(errorCode, errorMessage);
             setErrorMessage(errorCode + ": " + errorMessage);
           });
       } else {
@@ -77,13 +72,10 @@ const Login = () => {
           .then((userCredential) => {
             // Signed in 
             const user = userCredential.user;
-            console.log(user);
-            navigate("/browse");
           })
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            console.log(errorCode, errorMessage);
             setErrorMessage(errorCode + ": " + errorMessage);
           });
       }
@@ -94,9 +86,7 @@ const Login = () => {
 
   return (
     <div className="relative w-full h-screen">
-      <div className="absolute top-0 left-0 z-10 w-full flex items-center p-4 bg-transparent">
-        <img src={WatchWiz} alt="Logo" className="" />
-      </div>
+      <Header/>
       <img src="https://assets.nflxext.com/ffe/siteui/vlv3/74d734ca-0eab-4cd9-871f-bca01823d872/web/IN-en-20241021-TRIFECTA-perspective_2277eb50-9da3-4fdf-adbe-74db0e9ee2cf_medium.jpg"
         alt="Movie Background"
         className="absolute top-0 left-0 w-full h-full object-cover" />
