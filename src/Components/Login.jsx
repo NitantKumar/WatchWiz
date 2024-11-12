@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from '../utils/firebase';
 import { addUser } from '../utils/userSlice';
@@ -15,7 +15,12 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const handleToggleForm = () => {
-    setToggleForm(!toggleForm); 
+    setToggleForm(!toggleForm);
+  };
+
+  const displayTemporaryError = (message) => {
+    setErrorMessage(message);
+    setTimeout(() => setErrorMessage(''), 3000);
   };
 
   const validateFormData = (name = '', email, password) => {
@@ -41,7 +46,7 @@ const Login = () => {
   const handleFormSubmit = () => {
     const result = validateFormData(nameValue.current?.value, emailValue.current.value, passwordValue.current.value);
     if (!result.status) {
-      setErrorMessage(result.message);
+      displayTemporaryError(result.message);
       return;
     }
     if (result.status) {
@@ -54,17 +59,17 @@ const Login = () => {
             updateProfile(user, {
               displayName: nameValue.current.value
             }).then(() => {
-              dispatch(addUser({uid: user.uid, email: user.email, displayName: user.displayName}));
+              dispatch(addUser({ uid: user.uid, email: user.email, displayName: user.displayName }));
             }).catch((error) => {
               const errorCode = error.code;
               const errorMessage = error.message;
-              setErrorMessage(errorCode + ": " + errorMessage);
+              displayTemporaryError(errorCode + ": " + errorMessage);
             });
           })
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            setErrorMessage(errorCode + ": " + errorMessage);
+            displayTemporaryError(errorCode + ": " + errorMessage);
           });
       } else {
         //singin logic
@@ -76,7 +81,7 @@ const Login = () => {
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            setErrorMessage(errorCode + ": " + errorMessage);
+            displayTemporaryError(errorCode + ": " + errorMessage);
           });
       }
     } else {
@@ -86,7 +91,7 @@ const Login = () => {
 
   return (
     <div className="relative w-full h-screen">
-      <Header/>
+      <Header />
       <img src={BG_URL}
         alt="Movie Background"
         className="absolute top-0 left-0 w-full h-full object-cover" />
