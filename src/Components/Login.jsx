@@ -4,6 +4,7 @@ import { auth } from '../utils/firebase';
 import { addUser } from '../utils/userSlice';
 import { useDispatch } from 'react-redux';
 import Header from './Header';
+import { BG_URL } from '../utils/constants';
 
 const Login = () => {
   const [toggleForm, setToggleForm] = useState(false);
@@ -39,7 +40,6 @@ const Login = () => {
 
   const handleFormSubmit = () => {
     const result = validateFormData(nameValue.current?.value, emailValue.current.value, passwordValue.current.value);
-    console.log(result);
     if (!result.status) {
       setErrorMessage(result.message);
       return;
@@ -87,7 +87,7 @@ const Login = () => {
   return (
     <div className="relative w-full h-screen">
       <Header/>
-      <img src="https://assets.nflxext.com/ffe/siteui/vlv3/74d734ca-0eab-4cd9-871f-bca01823d872/web/IN-en-20241021-TRIFECTA-perspective_2277eb50-9da3-4fdf-adbe-74db0e9ee2cf_medium.jpg"
+      <img src={BG_URL}
         alt="Movie Background"
         className="absolute top-0 left-0 w-full h-full object-cover" />
       <form onSubmit={(e) => e.preventDefault()} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-60 p-8 rounded-lg text-white">
