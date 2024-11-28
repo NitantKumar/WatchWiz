@@ -17,7 +17,6 @@ const Header = () => {
       .catch((error) => {
         navigate('/error');
       });
-    console.log('User signed out');
   };
   const user = useSelector((store) => store.user);
 
