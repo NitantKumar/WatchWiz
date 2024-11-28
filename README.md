@@ -4,7 +4,7 @@ WatchWiz is a movie browsing application that lets users search, view, and disco
 
 ## Demo
 
-Explore the live demo here: [WatchWiz](https://watchwiz-93975.web.app)
+Explore the live demo here: [WatchWiz](https://watch-wiz.netlify.app/)
 
 ## Features
 
